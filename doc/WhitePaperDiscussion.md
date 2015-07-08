@@ -45,7 +45,7 @@ The last two goals, classification and intrinsic brightness determination of SN 
 ## Cadence Metrics
 Two cadence metrics for SN have been written by 
 * Rick Kessler 
-* Alex Kim
+* Alex Kim https://github.com/DarkEnergyScienceCollaboration/surveymetrics
 
 ## Some issues
 
