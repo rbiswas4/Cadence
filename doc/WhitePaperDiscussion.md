@@ -39,3 +39,8 @@ To summarize,
 * It is unclear how to account for the fact that our knowledge of SNIa might improve over time leading to larger gains for better strategies. 
 * It is also unclear if some of this will be accounted for by improvements in intrinsic dispersion.
 
+
+## Some issues
+
+* Should the analysis be separate for DDF anf WFD strategies? A combined study potentially has more benefits in the DDF fields, but has the problem of tying the two proposals togther.
+
