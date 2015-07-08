@@ -13,10 +13,13 @@ FRW or certain galaxy populations. Largely, this is achieved by using SN as trac
 * All of the stated goals stand to gain from increased numbers of well-measured supernovae. The first two goals, however, are indpendent of the spatial position of the supernovae, and do not necessarily gain if the same set of supernovae were distributed across a large region of the sky. The third goal, however, does require spatial coverage, and LSST is the only survey that could potentially do this.
 
 To summarize, 
-        * Need a large number of SN
-        * Be able to detect SN candidates early enough for selective follow-up
-        * classify SN types and from other possible transients 
-        * Need a good determination of intrinsic brightness
+
+* Need a large number of SN
+* Be able to detect SN candidates early enough for selective follow-up
+* classify SN types and from other possible transients 
+* Need a good determination of intrinsic brightness
+
+The last two goals, classification and intrinsic brightness determination of SN Ia required for cosmology may have different cadence requirements for optimization. 
 
 
 ## Requirement for these goals
@@ -39,6 +42,10 @@ To summarize,
 * It is unclear how to account for the fact that our knowledge of SNIa might improve over time leading to larger gains for better strategies. 
 * It is also unclear if some of this will be accounted for by improvements in intrinsic dispersion.
 
+## Cadence Metrics
+Two cadence metrics for SN have been written by 
+* Rick Kessler 
+* Alex Kim
 
 ## Some issues
 
