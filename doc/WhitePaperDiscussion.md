@@ -1,6 +1,6 @@
 # Supernova Cosmology and Astrophysics
 
-## Science Goals of Supernovae
+## Science Goals of the Supernova Group
 
 * Supernova Cosmology: Use a sample of well-measured supernovae and past knowledge of supernovae behavior to obtain intrinsic brightnesses of supernovae and derive constraints on cosmology, particularly dark energy properties
 * Related: Improvement of our understanding of the supernovae population. This 
@@ -10,7 +10,8 @@ etc.)
 FRW or certain galaxy populations. Largely, this is achieved by using SN as tracers of their host galaxies with the additional information about their distances being  well-measured.
 
 
-* All of the stated goals stand to gain from increased numbers of well-measured supernovae. The first two goals, however, are indpendent of the spatial position of the supernovae, and do not necessarily gain if the same set of supernovae were distributed across a large region of the sky. The third goal, however, does require spatial coverage, and LSST is the only survey that could potentially do this.
+* All of the stated goals stand to gain from increased numbers of well-measured supernovae. The first two goals, however, are indpendent of the spatial
+positions of the supernovae, and do not necessarily gain if the same set of supernovae were distributed across a large region of the sky. The third goal, however, does require spatial coverage, and LSST is the only survey that could potentially do this.
 
 To summarize, 
 
@@ -21,12 +22,18 @@ To summarize,
 
 The last two goals, classification and intrinsic brightness determination of SN Ia required for cosmology may have different cadence requirements for optimization. 
 
+### Previous Studies
 
+Based on previous simulation studies based on older versions of OpSims, the WFD  proposal has yielded few SN of useful quality. These studies have not looked into regions of overlap between field pointings (and doing so with and without dithers) is an important aspect of this study.
+  
 ## Requirement for these goals
 
 * High precision calibrated flux measurement of mulitband supernova light curve
-* Good temporal and wavelength (ie number of filters) sampling of the light curve
- 
+* 'Good' temporal and wavelength (ie. number of filters) sampling of the light curve of each supernova. The sampling over multiple filters is useful as determination of SNIa intrinsic brightness strongly depends on multi-band information to
+ determine a color like quantity at a particular phase. 
+
+We note that while a qualitative intuitive understanding of 'good sampling' exists (see below), we do not have a quantitative understanding of how the lack of such sampling degrades information. Outlining and carrying out such investigations should be an important part of this whitepaper.
+
 ## Observing Strategy Characteristics
 
 * Should have large number of epochs
@@ -50,4 +57,4 @@ Two cadence metrics for SN have been written by
 ## Some issues
 
 * Should the analysis be separate for DDF anf WFD strategies? A combined study potentially has more benefits in the DDF fields, but has the problem of tying the two proposals togther.
-
+* The statements about sampling of the SN light curves in multiple bands above have been made in the context of determining intrinsic brightness of SNIa. Aside  from that, there may be requirements for obtaining good photometric redshifts of host galaxies (of course, these may be determined from subsequent spectroscopic follow-up of hosts as well). Will the photoz group supply us with information on this count, and if so, what information should we provide?
