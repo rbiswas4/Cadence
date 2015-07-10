@@ -8,7 +8,7 @@ includes understanding the distribution of SN properties in nature, and their co
 etc.)
 * Use SN to study large scale structure, or deviations of the cosmology from 
 FRW or certain galaxy populations. Largely, this is achieved by using SN as tracers of their host galaxies with the additional information about their distances being  well-measured.
-
+* Lensing time delays measured using SN
 
 * All of the stated goals stand to gain from increased numbers of well-measured supernovae. The first two goals, however, are indpendent of the spatial
 positions of the supernovae, and do not necessarily gain if the same set of supernovae were distributed across a large region of the sky. The third goal, however, does require spatial coverage, and LSST is the only survey that could potentially do this.
