@@ -45,6 +45,8 @@ We note that while a qualitative intuitive understanding of 'good sampling' exis
 * We can study the cadence distribution by filter from the OpSim output directly in each field. The plot below shows the number of visits (or exposures) done in a particular field in different filters per night during the first season of Enigma_1189 in a DDF with coordinates as described. The grid shows a 5 day period to guide the eye. 
 ![cadence in a season of Enigma 1189 in a field](images/cadence.png)
 * We can study simulations of SN and apply classification and light curve fitting procedures to them in order to assess how well we can do with a simulated sample from OpSim. 
+* We can look at improvements of light curve fits by varying the epochs from OpSim.
+* We can compare this cadence to the cadence with which SN were observed in previous SN surveys.
 * We currently have two metrics that can be used in MAF that pertain to SN. We should try to understand how these metric values correlate with gains in light curve fits or cosmology as the opsims strategy changes.
 * It is unclear how to account for the fact that our knowledge of SNIa might improve over time leading to larger gains for better strategies. 
 * It is also unclear if some of this will be accounted for by improvements in intrinsic dispersion.
