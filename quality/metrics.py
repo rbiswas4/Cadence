@@ -198,6 +198,25 @@ class PerSNMetric(oss.SummaryOpsim):
         sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
         return sn
     def discoveryMetric(self, trigger=1):
+     	"""
+	return the detection probability as a function of the single exposure
+	efficiencies
+       	"""
+	efficiency = self.lightcurve.DetectionEfficiency.astype(float)
+	if trigger > 1.:
+	    raise ValueError('Trigger > 1 not implemented yet\n')
+        # probability of not being detected visit by visit
+	q = 1.0 - np.asarray(efficiency)
+
+
+        #print type(q)
+        #print q
+	logq = np.log(q)
+        # probability of no detection
+	logpiq = logq.sum()
+	piq = np.exp(logpiq)
+
+	return 1.0 -  piq
     
     def qualityMetric(self, Disp=0.05):
         
