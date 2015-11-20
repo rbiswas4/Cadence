@@ -97,7 +97,7 @@ class PerSNMetric(oss.SummaryOpsim):
         df = _.copy(deep=True)
         colnames = ['time', 'band', 'flux', 'fluxerr', 'zp', 'zpsys', 'SNR',
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
-                    'propID', 'night',]
+                    'propID', 'night', 'DetectionEfficiency']
         df['band'] = df['filter'].apply(lambda x: x.lower())
         df['flux'] = df.apply(lambda row: sn.catsimBandFluxes(row['expMJD'],
                               self.lsst_bp[row['band']]), axis=1)
@@ -111,9 +111,9 @@ class PerSNMetric(oss.SummaryOpsim):
         df = df.query('flux > 0. and fluxerr > 0.')
         s = len(df)
         df['SNR'] = df['flux'] / df['fluxerr']
+
+        df['DetectionEfficiency'] = df.apply(self.func, axis=1)
         df.sort('SNR', ascending=False, inplace=True)
-        if self.efficiency is not None:
-            df['DetectionEfficiency'] = df.apply(func, axis=1)
         self._numDropped = os - s
         self._lc = df
         return df[colnames]
@@ -127,7 +127,16 @@ class PerSNMetric(oss.SummaryOpsim):
         return sncosmo.fit_lc(self.SNCosmoLC, model=self.sncosmoModel,
                         vparam_names=['t0', 'x0', 'x1', 'c'], minsnr=3.)
 
-    
+
+    def func(self, row):
+        band = row['band']
+        SNR = row['SNR']
+        if self.efficiency is None:
+            return np.nan
+        else:
+            return self.efficiency.effSNR(band, SNR)
+
+
     @property
     def deltamusq(self):
         """
@@ -188,6 +197,7 @@ class PerSNMetric(oss.SummaryOpsim):
         sn.set(z=0.5)
         sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
         return sn
+    def discoveryMetric(self, trigger=1):
     
     def qualityMetric(self, Disp=0.05):
         

@@ -25,10 +25,15 @@ class EfficiencyTable(object):
         Returns
         -------
         """
+
+        if band == 'u':
+            band = 'g'
+        if band == 'y':
+            band = 'z'
+
         return self.interpolatedEfficiency[band](SNRvalues)
  
     
-    def effSNRNN(self, band, SNRvalues)
 
     @property
     def CompactEfficiencyTable(self):
