@@ -17,11 +17,14 @@ from efficiencyTable import EfficiencyTable
 
 
 class PerSNMetric(oss.SummaryOpsim):
-    def __init__(self, fieldID, t0, summarydf=None, snState=None, lsst_bp=None,
+    def __init__(self, t0, fieldID=None, raCol=None, decCol=None, summarydf=None, snState=None, lsst_bp=None,
             efficiency=None):
         oss.SummaryOpsim.__init__(self, summarydf=summarydf)
         
         self.fieldID = fieldID
+        self.raCol = raCol
+        self.decCol = decCol
+        self.summary = summarydf
         self.t0 = t0
         self._lc = None
         self._numDropped = None
@@ -34,8 +37,16 @@ class PerSNMetric(oss.SummaryOpsim):
     def numDropped(self):
         return self._numDropped
     
-    def lcplot(self, lowrange=-30., highrange=50.):
+    def lcplot(self, lowrange=-30., highrange=50., nightlyCoadd=False):
         lc = self.lightcurve
+        if nightlyCoadd:
+            aggregations = {'time': np.mean,
+                            'flux': np.mean,
+                            'fluxerr': lambda x: np.sqrt(np.sum(x**2))/len(x), 
+                            'zp': np.mean,
+                            'zpsys': 'first'}
+            groupedbynightlyfilters = lc.groupby(['night','band'])
+            lc = groupedbynightlyfilters.agg(aggregations)
         data = Table(lc.to_records())
         sncosmo.plot_lc(data, model=self.sncosmoModel, color='k',
                         pulls=False)
@@ -64,9 +75,16 @@ class PerSNMetric(oss.SummaryOpsim):
     @lazyproperty
     def SNCadence(self):
         fieldID = self.fieldID
+        ra = self.raCol
+        dec = self.decCol
         mjd_center = self.t0
         
-        vals = self.cadence_plot(fieldID, mjd_center=mjd_center, mjd_range=[-30., 70.])
+        vals = self.cadence_plot(fieldID=fieldID,
+                                 racol=self.raCol,
+                                 deccol=self.decCol,
+                                 summarydf=self.summary,
+                                 mjd_center=mjd_center,
+                                 mjd_range=[-30., 70.])
         return vals
 
     @property
@@ -77,7 +95,7 @@ class PerSNMetric(oss.SummaryOpsim):
     def lightcurve(self, lowrange = -30., highrange=50. ):
         
         sn = self.SN
-        #dataframe.set_index('obsHistID')
+        # dataframe.set_index('obsHistID')
         # timewindowlow 
         timelow = sn.get('t0') + lowrange
         timehigh = sn.get('t0') + highrange
@@ -91,7 +109,10 @@ class PerSNMetric(oss.SummaryOpsim):
         if modelhigh < timehigh:
             timehigh = modelhigh
         
-        dataframe = self.simlib(fieldID=self.fieldID)
+        if self.fieldID is None:
+            dataframe = self.summary
+        else:
+            dataframe = self.simlib(fieldID=self.fieldID)
         
         _ = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
         df = _.copy(deep=True)
@@ -164,12 +185,18 @@ class PerSNMetric(oss.SummaryOpsim):
         
     @property
     def radeg(self):
-        ra = self.ra(self.fieldID)
+        if self.fieldID is None:
+            ra = np.degrees(self.summary[self.raCol].iloc[0])
+        else:
+            ra = self.ra(self.fieldID)
         return np.degrees(ra)
     
     @property
     def decdeg(self):
-        dec = self.dec(self.fieldID)
+        if self.fieldID is None:
+            dec = np.degrees(self.summary[self.decCol].iloc[0])
+        else:
+            dec = self.dec(self.fieldID)
         return np.degrees(dec)
     
     @property
@@ -198,13 +225,13 @@ class PerSNMetric(oss.SummaryOpsim):
         sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
         return sn
     def discoveryMetric(self, trigger=1):
-     	"""
+        """
 	return the detection probability as a function of the single exposure
 	efficiencies
-       	"""
+        """
 	efficiency = self.lightcurve.DetectionEfficiency.astype(float)
 	if trigger > 1.:
-	    raise ValueError('Trigger > 1 not implemented yet\n')
+            raise ValueError('Trigger > 1 not implemented yet\n')
         # probability of not being detected visit by visit
 	q = 1.0 - np.asarray(efficiency)
 
@@ -217,9 +244,9 @@ class PerSNMetric(oss.SummaryOpsim):
 	piq = np.exp(logpiq)
 
 	return 1.0 -  piq
-    
+
     def qualityMetric(self, Disp=0.05):
-        
+ 
         return Disp * Disp / self.deltamusq
 
 
