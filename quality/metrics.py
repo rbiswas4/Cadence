@@ -38,16 +38,18 @@ class PerSNMetric(oss.SummaryOpsim):
         return self._numDropped
     
     def lcplot(self, lowrange=-30., highrange=50., nightlyCoadd=False):
-        lc = self.lightcurve
-        if nightlyCoadd:
-            aggregations = {'time': np.mean,
-                            'flux': np.mean,
-                            'fluxerr': lambda x: np.sqrt(np.sum(x**2))/len(x), 
-                            'zp': np.mean,
-                            'zpsys': 'first'}
-            groupedbynightlyfilters = lc.groupby(['night','band'])
-            lc = groupedbynightlyfilters.agg(aggregations)
-        data = Table(lc.to_records())
+        # if nightlyCoadd:
+        #    lc = self.coaddedLightCurve
+        # else:
+        #   lc = self.lightcurve
+        #    aggregations = {'time': np.mean,
+        #                    'flux': np.mean,
+        #                    'fluxerr': lambda x: np.sqrt(np.sum(x**2))/len(x), 
+        #                    'zp': np.mean,
+        #                    'zpsys': 'first'}
+        #    groupedbynightlyfilters = lc.groupby(['night','band'])
+        #   lc = groupedbynightlyfilters.agg(aggregations)
+        data = self.SNCosmoLC(nightlyCoadd=nightlyCoadd)
         sncosmo.plot_lc(data, model=self.sncosmoModel, color='k',
                         pulls=False)
         
@@ -87,9 +89,21 @@ class PerSNMetric(oss.SummaryOpsim):
                                  mjd_range=[-30., 70.])
         return vals
 
-    @property
-    def SNCosmoLC(self):
-        return Table(self.lightcurve.to_records())
+    def SNCosmoLC(self, nightlyCoadd=False):
+        if nightlyCoadd:
+            lc = self.coaddedLightCurve
+        else:
+            lc = self.lightcurve
+        return Table(lc.to_records())
+
+    def writeLightCurve(self,
+                        fname,
+                        format='ascii',
+                        nightlyCoadd=False,
+                        **kwargs):
+
+        lc = self.SNCosmoLC(nightlyCoadd=nightlyCoadd)
+        sncosmo.write_lc(lc, fname, format=format, **kwargs)
         
     @property         
     def lightcurve(self, lowrange = -30., highrange=50. ):
@@ -139,6 +153,18 @@ class PerSNMetric(oss.SummaryOpsim):
         self._lc = df
         return df[colnames]
     
+    @lazyproperty
+    def coaddedLightCurve(self):
+        lc = self.lightcurve
+        aggregations = {'time': np.mean,
+                        'flux': np.mean,
+                        'fluxerr': lambda x: np.sqrt(np.sum(x**2))/len(x), 
+                        'zp': np.mean,
+                        'zpsys': 'first'}
+        groupedbynightlyfilters = lc.groupby(['night','band'])
+        return groupedbynightlyfilters.agg(aggregations)
+
+
     @lazyproperty
     def fits(self):
         """
