@@ -128,8 +128,8 @@ class PerSNMetric(oss.SummaryOpsim):
         else:
             dataframe = self.simlib(fieldID=self.fieldID)
         
-        _ = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
-        df = _.copy(deep=True)
+        x = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
+        df = x.copy(deep=True)
         colnames = ['time', 'band', 'flux', 'fluxerr', 'zp', 'zpsys', 'SNR',
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
                     'propID', 'night', 'DetectionEfficiency']
@@ -151,6 +151,11 @@ class PerSNMetric(oss.SummaryOpsim):
         df.sort('SNR', ascending=False, inplace=True)
         self._numDropped = os - s
         self._lc = df
+
+
+        for col in colnames:
+            if col not in df.columns:
+                colnames.remove(col)
         return df[colnames]
     
     @lazyproperty
