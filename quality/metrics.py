@@ -171,8 +171,8 @@ class PerSNMetric(oss.SummaryOpsim):
         `sncosmo.fit_lc` return which is a tuple to fit results, and sncosmo
         model set to best fit model.
         """
-        return sncosmo.fit_lc(self.SNCosmoLC, model=self.sncosmoModel,
-                        vparam_names=['t0', 'x0', 'x1', 'c'], minsnr=3.)
+        return sncosmo.fit_lc(self.SNCosmoLC(), model=self.sncosmoModel,
+                        vparam_names=['t0', 'x0', 'x1', 'c'], minsnr=0.01)
 
 
     def func(self, row):
@@ -212,7 +212,7 @@ class PerSNMetric(oss.SummaryOpsim):
     @property
     def radeg(self):
         if self.fieldID is None:
-            ra = np.degrees(self.summary[self.raCol].iloc[0])
+            ra = self.summary[self.raCol].iloc[0]
         else:
             ra = self.ra(self.fieldID)
         return np.degrees(ra)
@@ -220,7 +220,7 @@ class PerSNMetric(oss.SummaryOpsim):
     @property
     def decdeg(self):
         if self.fieldID is None:
-            dec = np.degrees(self.summary[self.decCol].iloc[0])
+            dec = self.summary[self.decCol].iloc[0]
         else:
             dec = self.dec(self.fieldID)
         return np.degrees(dec)
