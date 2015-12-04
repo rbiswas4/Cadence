@@ -153,9 +153,13 @@ class PerSNMetric(oss.SummaryOpsim):
         self._lc = df
 
 
+        ll = df.columns.tolist()
+        notcalculated = []
         for col in colnames:
-            if col not in df.columns:
-                colnames.remove(col)
+            if col not in ll:
+                notcalculated.append(col)
+        for col in notcalculated:
+            colnames.remove(col)
         return df[colnames]
     
     @lazyproperty
