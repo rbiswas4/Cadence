@@ -50,7 +50,7 @@ class PerSNMetric(oss.SummaryOpsim):
         #    groupedbynightlyfilters = lc.groupby(['night','band'])
         #   lc = groupedbynightlyfilters.agg(aggregations)
         data = self.SNCosmoLC(nightlyCoadd=nightlyCoadd)
-        sncosmo.plot_lc(data, model=self.sncosmoModel, color='k',
+        return sncosmo.plot_lc(data, model=self.sncosmoModel, color='k',
                         pulls=False)
         
     @property
