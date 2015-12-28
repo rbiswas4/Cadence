@@ -37,7 +37,8 @@ class PerSNMetric(oss.SummaryOpsim):
     def numDropped(self):
         return self._numDropped
     
-    def lcplot(self, lowrange=-30., highrange=50., nightlyCoadd=False):
+    def lcplot(self, lowrange=-30., highrange=50., nightlyCoadd=False, scattered=False,
+            seed=0):
         # if nightlyCoadd:
         #    lc = self.coaddedLightCurve
         # else:
@@ -49,7 +50,8 @@ class PerSNMetric(oss.SummaryOpsim):
         #                    'zpsys': 'first'}
         #    groupedbynightlyfilters = lc.groupby(['night','band'])
         #   lc = groupedbynightlyfilters.agg(aggregations)
-        data = self.SNCosmoLC(nightlyCoadd=nightlyCoadd)
+        data = self.SNCosmoLC(nightlyCoadd=nightlyCoadd, scattered=scattered,
+                              seed=seed)
         return sncosmo.plot_lc(data, model=self.sncosmoModel, color='k',
                         pulls=False)
         
@@ -89,11 +91,19 @@ class PerSNMetric(oss.SummaryOpsim):
                                  mjd_range=[-30., 70.])
         return vals
 
-    def SNCosmoLC(self, nightlyCoadd=False):
+    def SNCosmoLC(self, nightlyCoadd=False, scattered=False, seed=0):
         if nightlyCoadd:
             lc = self.coaddedLightCurve
         else:
             lc = self.lightcurve
+        lc['modelFlux'] = lc['flux']
+        # add scatter if desired
+        np.random.seed(seed)
+        lc['deviation'] = np.random.normal(size=len(lc['flux']))
+        if scattered:
+            lc['flux'] = lc['flux'] + lc['deviation'] * lc['fluxerr']
+
+
         return Table(lc.to_records())
 
     def writeLightCurve(self,
@@ -130,6 +140,7 @@ class PerSNMetric(oss.SummaryOpsim):
         
         x = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
         df = x.copy(deep=True)
+        print (len(x))
         colnames = ['time', 'band', 'flux', 'fluxerr', 'zp', 'zpsys', 'SNR',
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
                     'propID', 'night', 'DetectionEfficiency']
@@ -148,7 +159,7 @@ class PerSNMetric(oss.SummaryOpsim):
         df['SNR'] = df['flux'] / df['fluxerr']
 
         df['DetectionEfficiency'] = df.apply(self.func, axis=1)
-        df.sort('SNR', ascending=False, inplace=True)
+        df.sort_values('SNR', ascending=False, inplace=True)
         self._numDropped = os - s
         self._lc = df
 
@@ -171,7 +182,9 @@ class PerSNMetric(oss.SummaryOpsim):
                         'zp': np.mean,
                         'zpsys': 'first'}
         groupedbynightlyfilters = lc.groupby(['night','band'])
-        return groupedbynightlyfilters.agg(aggregations)
+        glc = groupedbynightlyfilters.agg(aggregations)
+        glc['SNR'] = glc['flux']/glc['fluxerr']
+        return glc
 
 
     @lazyproperty
@@ -180,7 +193,8 @@ class PerSNMetric(oss.SummaryOpsim):
         `sncosmo.fit_lc` return which is a tuple to fit results, and sncosmo
         model set to best fit model.
         """
-        return sncosmo.fit_lc(self.SNCosmoLC(), model=self.sncosmoModel,
+        return sncosmo.fit_lc(self.SNCosmoLC(scattered=True,
+                                            nightlyCoadd=True, seed=0), model=self.sncosmoModel,
                         vparam_names=['t0', 'x0', 'x1', 'c'], minsnr=0.01)
 
 
