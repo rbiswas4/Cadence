@@ -11,7 +11,7 @@ from astropy.units import Unit
 import sncosmo
 
 from lsst.sims.photUtils import BandpassDict
-from lsst.sims.catUtils.mixins import SNObject
+from lsst.sims.catUtils.supernovae import SNObject
 from astropy.utils.misc import lazyproperty
 from efficiencyTable import EfficiencyTable
 
@@ -145,7 +145,7 @@ class PerSNMetric(oss.SummaryOpsim):
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
                     'propID', 'night', 'DetectionEfficiency']
         df['band'] = df['filter'].apply(lambda x: x.lower())
-        df['flux'] = df.apply(lambda row: sn.catsimBandFluxes(row['expMJD'],
+        df['flux'] = df.apply(lambda row: sn.catsimBandFlux(row['expMJD'],
                               self.lsst_bp[row['band']]), axis=1)
         df['fluxerr'] = df.apply(lambda row: sn.catsimBandFluxError(row['expMJD'],
                                  self.lsst_bp[row['band']],
