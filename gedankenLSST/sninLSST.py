@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from lsst.sims.catUtils.supernovae import SNObject
 from OpSimSummary import summarize_opsim as oss
+from astropy.table import Table
 
 __all__ = ['SNObs']
 class SNObs(oss.SummaryOpsim):
@@ -81,6 +82,20 @@ class SNObs(oss.SummaryOpsim):
 
         return sn
 
+
+    def SNCosmoLC(self, scattered=False, seed=0):
+
+        lc = self.lightcurve
+        lc['modelFlux'] = lc['flux']
+
+        # add scatter if desired
+        np.random.seed(seed)
+        lc['deviation'] = np.random.normal(size=len(lc['flux']))
+
+        if scattered:
+            lc['flux'] = lc['flux'] + lc['deviation'] * lc['fluxerr']
+
+        return Table(lc.to_records())
     
     @property
     def lightcurve(self, lowrange=-30., highrange=50. ):
@@ -107,7 +122,6 @@ class SNObs(oss.SummaryOpsim):
 
         x = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
         df = x.copy(deep=True)
-        print (len(x))
         colnames = ['time', 'band', 'flux', 'fluxerr', 'zp', 'zpsys', 'SNR',
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
                     'propID', 'night', 'DetectionEfficiency']
