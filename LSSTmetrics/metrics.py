@@ -12,7 +12,7 @@ import sncosmo
 
 from lsst.sims.photUtils import BandpassDict
 from lsst.sims.catUtils.supernovae import SNObject
-from astropy.utils.misc import lazyproperty
+from astropy.utils import lazyproperty
 from efficiencyTable import EfficiencyTable
 
 
