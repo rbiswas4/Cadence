@@ -118,6 +118,7 @@ class PerSNMetric(oss.SummaryOpsim):
     @property         
     def lightcurve(self, lowrange = -30., highrange=50. ):
         
+        print ("HELLO !!")
         sn = self.SN
         # dataframe.set_index('obsHistID')
         # timewindowlow 
@@ -138,9 +139,11 @@ class PerSNMetric(oss.SummaryOpsim):
         else:
             dataframe = self.simlib(fieldID=self.fieldID)
         
+        # if not('band' in dataframe.columns) and 'filter' in dataframe.colums:
+        #    dataframe.rename(columns={'filter':'band'}, inplace=True)
         x = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
         df = x.copy(deep=True)
-        print (len(x))
+        print(len(x), df.columns)
         colnames = ['time', 'band', 'flux', 'fluxerr', 'zp', 'zpsys', 'SNR',
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
                     'propID', 'night', 'DetectionEfficiency']

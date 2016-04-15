@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import absolute_import
 from OpSimSummary import summarize_opsim as oss
 import matplotlib.pyplot as plt
 import os
@@ -13,7 +13,7 @@ import sncosmo
 from lsst.sims.photUtils import BandpassDict
 from lsst.sims.catUtils.supernovae import SNObject
 from astropy.utils import lazyproperty
-from efficiencyTable import EfficiencyTable
+from .efficiencyTable import EfficiencyTable
 
 
 class PerSNMetric(oss.SummaryOpsim):
@@ -118,6 +118,7 @@ class PerSNMetric(oss.SummaryOpsim):
     @property         
     def lightcurve(self, lowrange = -30., highrange=50. ):
         
+        print ('Hello')
         sn = self.SN
         # dataframe.set_index('obsHistID')
         # timewindowlow 
@@ -140,11 +141,13 @@ class PerSNMetric(oss.SummaryOpsim):
         
         x = dataframe.query('expMJD > @timelow and expMJD < @timehigh')
         df = x.copy(deep=True)
-        print (len(x))
         colnames = ['time', 'band', 'flux', 'fluxerr', 'zp', 'zpsys', 'SNR',
                     'finSeeing', 'airmass', 'filtSkyBrightness','fiveSigmaDepth',
                     'propID', 'night', 'DetectionEfficiency']
+        print (len(x), df.columns)
         df['band'] = df['filter'].apply(lambda x: x.lower())
+        print(df.columns)
+        print(df.band.unique())
         df['flux'] = df.apply(lambda row: sn.catsimBandFlux(row['expMJD'],
                               self.lsst_bp[row['band']]), axis=1)
         df['fluxerr'] = df.apply(lambda row: sn.catsimBandFluxError(row['expMJD'],
