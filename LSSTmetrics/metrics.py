@@ -146,8 +146,6 @@ class PerSNMetric(oss.SummaryOpsim):
                     'propID', 'night', 'DetectionEfficiency']
         print (len(x), df.columns)
         df['band'] = df['filter'].apply(lambda x: x.lower())
-        print(df.columns)
-        print(df.band.unique())
         df['flux'] = df.apply(lambda row: sn.catsimBandFlux(row['expMJD'],
                               self.lsst_bp[row['band']]), axis=1)
         df['fluxerr'] = df.apply(lambda row: sn.catsimBandFluxError(row['expMJD'],
