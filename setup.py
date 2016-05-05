@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(# package information
       name="gedankenLSST",
-      version="0.0.1dev",
+      version="0.0.2dev",
       description='A package to generate LSST light curves without using OpSim',
       long_description='''We can generate LSST light curves using  ''',
       # What code to include as packages
@@ -19,7 +19,7 @@ setup(# package information
 
 setup(# package information
       name="LSSTmetrics",
-      version="0.0.1dev",
+      version="0.0.2dev",
       description='A package to generate LSST light curves without using OpSim',
       long_description='''We can generate LSST light curves using  ''',
       # What code to include as packages
