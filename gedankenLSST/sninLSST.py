@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from lsst.sims.catUtils.supernovae import SNObject
-from OpSimSummary import summarize_opsim as oss
+from opsimsummary import summarize_opsim as oss
 from astropy.table import Table
 
 __all__ = ['SNObs']
