@@ -269,6 +269,10 @@ class PerSNMetric(oss.SummaryOpsim):
 
         return sn
 
+    def redshiftSN(self, redshift):
+        self.SN.set(z=redshift)
+        self.SN.set_source_peakabsmag(self.bessellBpeakabsmag, 'bessellB', 'ab')
+
     @staticmethod
     def SNobj(fieldID, t0, snState=None): 
         sn = SNObject(ra=np.degrees(so.ra(fieldID)), 
