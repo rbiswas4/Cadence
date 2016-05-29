@@ -17,8 +17,9 @@ from .efficiencyTable import EfficiencyTable
 
 
 class PerSNMetric(oss.SummaryOpsim):
-    def __init__(self, t0, fieldID=None, raCol=None, decCol=None, summarydf=None, snState=None, lsst_bp=None,
-            efficiency=None):
+    def __init__(self, t0, fieldID=None, raCol=None, decCol=None,
+                 summarydf=None, snState=None, lsst_bp=None, efficiency=None,
+                 peakAbsMagBesselB=-19.3):
         oss.SummaryOpsim.__init__(self, summarydf=summarydf)
         
         self.fieldID = fieldID
@@ -31,6 +32,8 @@ class PerSNMetric(oss.SummaryOpsim):
         self.snState = snState
         self.lsst_bp = lsst_bp
         self.efficiency = efficiency
+        self.peakAbsMagBesselB = peakAbsMagBesselB
+        self._SN = None
         return
 
     @property
@@ -118,7 +121,6 @@ class PerSNMetric(oss.SummaryOpsim):
     @property         
     def lightcurve(self, lowrange = -30., highrange=50. ):
         
-        print ('Hello')
         sn = self.SN
         # dataframe.set_index('obsHistID')
         # timewindowlow 
@@ -255,24 +257,33 @@ class PerSNMetric(oss.SummaryOpsim):
         `lsst.sims.catsim.SNObject` instance with peakMJD set to t0
         """
 
-        if self.snState is not None:
-            return SNObject.fromSNState(self.snState)
+        if self._SN is not None:
+            pass
+            # return self._SN
 
-        sn = SNObject(ra=self.radeg, dec=self.decdeg)
-        sn.set(t0=self.t0)
-        sn.set(z=0.5)
-        sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
+        elif self.snState is not None:
+            self._SN = SNObject.fromSNState(self.snState)
+        else :
+            sn = SNObject(ra=self.radeg, dec=self.decdeg)
+            sn.set(t0=self.t0)
+            sn.set(z=0.5)
+            sn.set_source_peakabsmag(self.peakAbsMagBesselB, 'bessellB', 'ab')
+            self._SN = sn
 
+        return self._SN
 
-        return sn
+    def redshiftSN(self, redshift):
+
+        self.SN.set(z=redshift)
+        self.SN.set_source_peakabsmag(self.peakAbsMagBesselB, 'bessellB', 'ab')
     
     @staticmethod
-    def SNobj(fieldID, t0, snState=None): 
+    def SNobj(fieldID, t0, snState=None, peakAbsMagBesselB=-19.3): 
         sn = SNObject(ra=np.degrees(so.ra(fieldID)), 
                   dec=np.degrees(so.dec(fieldID)))
         sn.set(t0=t0)
         sn.set(z=0.5)
-        sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
+        sn.set_source_peakabsmag(peakAbsMagBesselB, 'bessellB', 'ab')
         return sn
     def discoveryMetric(self, trigger=1):
         """
