@@ -18,7 +18,7 @@ from efficiencyTable import EfficiencyTable
 
 class PerSNMetric(oss.SummaryOpsim):
     def __init__(self, t0, fieldID=None, raCol=None, decCol=None, summarydf=None, snState=None, lsst_bp=None,
-            efficiency=None):
+            efficiency=None, bessellBpeakabsmag=-19.3):
         oss.SummaryOpsim.__init__(self, summarydf=summarydf)
         
         self.fieldID = fieldID
@@ -31,6 +31,7 @@ class PerSNMetric(oss.SummaryOpsim):
         self.snState = snState
         self.lsst_bp = lsst_bp
         self.efficiency = efficiency
+        self.bessellBpeakabsmag = bessellBpeakabsmag
         return
 
     @property
@@ -263,18 +264,18 @@ class PerSNMetric(oss.SummaryOpsim):
         sn = SNObject(ra=self.radeg, dec=self.decdeg)
         sn.set(t0=self.t0)
         sn.set(z=0.5)
-        sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
+        sn.set_source_peakabsmag(self.bessellBpeakabsmag, 'bessellB', 'ab')
 
 
         return sn
-    
+
     @staticmethod
     def SNobj(fieldID, t0, snState=None): 
         sn = SNObject(ra=np.degrees(so.ra(fieldID)), 
                   dec=np.degrees(so.dec(fieldID)))
         sn.set(t0=t0)
         sn.set(z=0.5)
-        sn.set_source_peakabsmag(-19.3, 'bessellB', 'ab')
+        sn.set_source_peakabsmag(bessellBpeakabsmag, 'bessellB', 'ab')
         return sn
     def discoveryMetric(self, trigger=1):
         """
