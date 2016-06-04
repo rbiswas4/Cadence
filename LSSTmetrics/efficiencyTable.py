@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+"""
+read the efficiency Table provided by R. Kessler
 
-
+"""
 import numpy as np
 from cStringIO import StringIO
 import pandas as pd
@@ -14,7 +15,6 @@ class EfficiencyTable(object):
 
         self.efficiencyTable = efficiencyTable
         self.filterList = efficiencyTable.band.unique().astype('str')
-
 
     def effSNR(self, band, SNRvalues):
         """
