@@ -7,9 +7,21 @@ The aim of this package is to perform a thought experiment producing a set of LS
 
 This is largely intended for use at individual locations (fields), and for SNe. 
 
-#### Requirments:
+#### Pre-requisites and Installation:
+This is a python package and depends on many python packages, which are easily installable through pip or conda. Installing pandas would install other python packages required except the other two listed. 
+- [pandas](http://pandas.pydata.org/) which is easy to install via conda or pip 
 - [lsst.sims.catUtils](https://github.com/lsst/sims_catUtils) package must be setup. [Installation instructions are here](https://confluence.lsstcorp.org/display/SIM/Catalogs+and+MAF). Currently the branch sniacatsim_rebase must be setup.
 - [OpSimSummary](https://github.com/rbiswas4/OpSimSummary) with installation instruction in README
+
+Finally, while, not a requirement, some of the examples are in ipython/jupyter notebooks. To run these, you will need [jupyter Notebooks](http://jupyter.org/) which are also easy to install via conda or pip. 
+
+Once the pre-requisites are installed, clone this repository and at the top level directory use the setup script to install the packages:
+```
+git clone https://github.com/rbiswas4/Cadence.git
+cd Cadence
+python setup.py install --user
+```
+
 #### Examples:
 
-- [Basic Usage :](./examples/using_gedankenLSST.ipynb) 
+- [Basic Usage :](./examples/ExampleLightCurve_DDF_WFD.ipynb)

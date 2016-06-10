@@ -34,8 +34,9 @@ setup(# package information
       # What data to include as packages
       include_package_data=True,
       package_data={gLSST: ['example_data/*.FITS',
-                                     'example_data/*.dat',
-                                      'example_data/*.md']}
+                            'example_data/*.DAT',
+                            'example_data/*.dat',
+                            'example_data/*.md']}
       )
 
 
@@ -52,5 +53,6 @@ setup(# package information
       include_package_data=True,
       package_data={metrics_pname: ['example_data/*.FITS',
                                     'example_data/*.dat',
+                                    'example_data/*.DAT',
                                     'example_data/*.md']}
       )
