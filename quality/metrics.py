@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from OpSimSummary import summarize_opsim as oss
+from opsimsummary import summarize_opsim as oss
 import matplotlib.pyplot as plt
 import os
 import numpy as np
