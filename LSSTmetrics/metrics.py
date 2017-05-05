@@ -13,7 +13,7 @@ import sncosmo
 from lsst.sims.photUtils import BandpassDict
 from lsst.sims.catUtils.supernovae import SNObject
 from astropy.utils import lazyproperty
-from efficiencyTable import EfficiencyTable
+from .efficiencyTable import EfficiencyTable
 
 
 class PerSNMetric(oss.SummaryOpsim):
